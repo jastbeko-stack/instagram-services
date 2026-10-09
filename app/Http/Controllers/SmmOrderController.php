@@ -45,7 +45,9 @@ class SmmOrderController extends Controller
                 ->get();
         });
 
-        return view('smm.services-table', compact('categories'));
+        return response()
+            ->view('smm.services-table', compact('categories'))
+            ->header('Cache-Control', 'public, s-maxage=300, stale-while-revalidate=600');
     }
 
     public function store(Request $request)

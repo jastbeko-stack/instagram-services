@@ -48,7 +48,9 @@ class UsernameMarketplaceController extends Controller
 
         $usernames = $query->paginate(12)->withQueryString();
 
-        return view('marketplace.index', compact('usernames'));
+        return response()
+            ->view('marketplace.index', compact('usernames'))
+            ->header('Cache-Control', 'public, s-maxage=60, stale-while-revalidate=300');
     }
 
     public function show($id)

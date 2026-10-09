@@ -37,6 +37,8 @@ class HomeController extends Controller
             ];
         });
 
-        return view('home', compact('featuredUsernames', 'categories', 'stats'));
+        return response()
+            ->view('home', compact('featuredUsernames', 'categories', 'stats'))
+            ->header('Cache-Control', 'public, s-maxage=120, stale-while-revalidate=600');
     }
 }
