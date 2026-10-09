@@ -36,18 +36,20 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
-        // 3. Platform Settings
-        $settings = [
-            'site_name' => 'انستازون | InstaZone',
-            'usdt_trc20_address' => 'TYDzsYUEWzK1oP4vB7g8W8c4BvHnK7f8zM',
-            'usdt_bep20_address' => '0x71C67Ed37037C0d7Bf3014B1F20606B5e4492A72',
-            'telegram_support' => '@InstaZone_Support',
+        // 3. Platform Settings (Set defaults only if not set already)
+        $defaultSettings = [
+            'site_name' => 'ساير كود | cyber code',
+            'usdt_trc20_address' => 'THY4LNYZCPtVRJEzqnPywzSwbLpaYYQXg6',
+            'usdt_bep20_address' => 'THY4LNYZCPtVRJEzqnPywzSwbLpaYYQXg6',
+            'telegram_support' => '@ht8k',
             'whatsapp_support' => '+9647700000000',
-            'notice_banner' => '✨ أهلاً بكم في انستازون - المتجر الأول لبيع اليوزرات القديمة والرباعية وزيادة المتابعين مع الدفع المشفر USDT!',
+            'notice_banner' => '✨ أهلاً بكم في سايبر كود - المتجر الأول لبيع اليوزرات القديمة والرباعية وزيادة المتابعين مع الدفع المشفر USDT!',
         ];
 
-        foreach ($settings as $key => $val) {
-            Setting::set($key, $val);
+        foreach ($defaultSettings as $key => $val) {
+            if (!Setting::where('key', $key)->exists()) {
+                Setting::set($key, $val);
+            }
         }
 
         // 4. Sample SMM Provider
