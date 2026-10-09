@@ -17,19 +17,23 @@ class HomeController extends Controller
             ->take(6)
             ->get();
 
-        $categories = SmmCategory::where('status', true)
-            ->with(['services' => function ($query) {
-                $query->where('status', true)->orderBy('price_per_1k');
-            }])
-            ->orderBy('sort_order')
-            ->get();
+        $categories = \Illuminate\Support\Facades\Cache::remember('home_categories', 300, function () {
+            return SmmCategory::where('status', true)
+                ->with(['services' => function ($query) {
+                    $query->where('status', true)->orderBy('price_per_1k');
+                }])
+                ->orderBy('sort_order')
+                ->get();
+        });
 
-        $stats = [
-            'total_usernames_sold' => UsernameOrder::count() + 148,
-            'total_smm_orders' => SmmOrder::count() + 1520,
-            'available_usernames' => InstagramUsername::where('status', 'available')->count(),
-            'active_services' => SmmService::where('status', true)->count(),
-        ];
+        $stats = \Illuminate\Support\Facades\Cache::remember('home_stats', 300, function () {
+            return [
+                'total_usernames_sold' => UsernameOrder::count() + 148,
+                'total_smm_orders' => SmmOrder::count() + 1520,
+                'available_usernames' => InstagramUsername::where('status', 'available')->count(),
+                'active_services' => SmmService::where('status', true)->count(),
+            ];
+        });
 
         return view('home', compact('featuredUsernames', 'categories', 'stats'));
     }
