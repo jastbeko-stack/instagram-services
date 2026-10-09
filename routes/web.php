@@ -15,7 +15,6 @@ Route::get('/usernames/{id}', [UsernameMarketplaceController::class, 'show'])->n
 Route::get('/services', [SmmOrderController::class, 'servicesList'])->name('smm.servicesList');
 Route::get('/debug-db', function () {
     try {
-        $db = \Illuminate\Support\Facades\DB::connection()->getPdo();
         $driver = \Illuminate\Support\Facades\DB::connection()->getDriverName();
         $tables = \Illuminate\Support\Facades\DB::select("SELECT table_schema, table_name FROM information_schema.tables WHERE table_schema IN ('instagram', 'public')");
         $usersCount = \App\Models\User::count();
@@ -25,7 +24,9 @@ Route::get('/debug-db', function () {
             'tables' => $tables,
             'users_count' => $usersCount,
             'env_db_connection' => env('DB_CONNECTION'),
-            'env_db_schema' => env('DB_SCHEMA'),
+            'getenv_db_connection' => getenv('DB_CONNECTION'),
+            'env_db_host' => env('DB_HOST'),
+            'getenv_db_host' => getenv('DB_HOST'),
         ]);
     } catch (\Throwable $e) {
         return response()->json([
@@ -33,6 +34,9 @@ Route::get('/debug-db', function () {
             'error' => $e->getMessage(),
             'driver' => \Illuminate\Support\Facades\DB::connection()->getDriverName(),
             'env_db_connection' => env('DB_CONNECTION'),
+            'getenv_db_connection' => getenv('DB_CONNECTION'),
+            'env_db_host' => env('DB_HOST'),
+            'getenv_db_host' => getenv('DB_HOST'),
         ], 500);
     }
 });
