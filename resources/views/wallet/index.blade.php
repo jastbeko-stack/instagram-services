@@ -1,0 +1,121 @@
+@extends('layouts.app')
+
+@section('content')
+<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-8">
+
+    <!-- Header & Balance Banner -->
+    <div class="glass-card rounded-3xl p-8 border border-white/10 relative overflow-hidden">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 relative z-10">
+            <div>
+                <span class="px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 inline-block mb-3">
+                    <i class="fa-solid fa-wallet"></i> المحفظة الرقمية
+                </span>
+                <h1 class="text-3xl font-black text-white mb-2">رصيد حسابك ومعاملاتك المالية</h1>
+                <p class="text-xs sm:text-sm text-slate-300">
+                    رصيدك يمكنك استخدامه مباشرة لشراء اليوزرات أو طلب خدمات المتابعين والتفاعل.
+                </p>
+            </div>
+
+            <!-- Big Balance Box -->
+            <div class="bg-black/60 rounded-2xl p-6 border border-emerald-500/30 text-center sm:text-right flex items-center gap-6">
+                <div>
+                    <span class="text-xs text-slate-400 block mb-1">الرصيد المتاح حالياً</span>
+                    <div class="text-3xl sm:text-4xl font-black font-outfit text-white">
+                        ${{ number_format($user->balance, 2) }}
+                        <span class="text-sm font-mono text-emerald-400">USDT</span>
+                    </div>
+                </div>
+                <a href="{{ route('wallet.deposit') }}" class="px-6 py-3.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs shadow-lg shadow-emerald-600/30 transition flex items-center gap-2 shrink-0">
+                    <i class="fa-solid fa-plus"></i> شحن رصيد USDT
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pending Deposits Notice (if any) -->
+    @if($pendingDeposits->count() > 0)
+        <div class="glass-card rounded-2xl p-5 border border-amber-500/30 bg-amber-500/5">
+            <h3 class="text-xs font-bold text-amber-400 mb-3 flex items-center gap-2">
+                <i class="fa-solid fa-hourglass-half"></i> طلبات إيداع قيد المراجعة والتدقيق:
+            </h3>
+            <div class="space-y-2">
+                @foreach($pendingDeposits as $p)
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 p-3 rounded-xl bg-black/40 border border-white/5 text-xs">
+                        <div class="flex items-center gap-3">
+                            <span class="font-mono text-amber-300 font-bold">#{{ $p->deposit_code }}</span>
+                            <span>إيداع <strong class="text-white">${{ number_format($p->amount_usd, 2) }} USDT</strong> عبر شبكة <strong class="text-emerald-400 font-mono">{{ $p->network }}</strong></span>
+                        </div>
+                        <div class="flex items-center gap-3 text-slate-400 font-mono text-[11px]">
+                            <span>TXID: {{ Str::limit($p->txid, 20) }}</span>
+                            <span>•</span>
+                            <span>{{ $p->created_at->diffForHumans() }}</span>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+    @endif
+
+    <!-- Transactions Ledger -->
+    <div class="glass-card rounded-3xl border border-white/10 overflow-hidden">
+        <div class="bg-white/5 px-6 py-4 border-b border-white/10 flex items-center justify-between">
+            <h2 class="text-base font-bold text-white flex items-center gap-2">
+                <i class="fa-solid fa-receipt text-pink-400"></i> سجل العمليات والحركات المالية
+            </h2>
+            <span class="text-xs text-slate-400 font-mono">{{ $transactions->total() }} عملية مسجلة</span>
+        </div>
+
+        @if($transactions->count() > 0)
+            <div class="overflow-x-auto">
+                <table class="w-full text-right text-xs">
+                    <thead class="bg-black/50 text-slate-400 border-b border-white/10">
+                        <tr>
+                            <th class="py-4 px-6 font-bold">نوع العملية</th>
+                            <th class="py-4 px-4 font-bold">البيان / الوصف</th>
+                            <th class="py-4 px-4 font-bold text-center">المبلغ</th>
+                            <th class="py-4 px-4 font-bold text-center">الرصيد قبل</th>
+                            <th class="py-4 px-4 font-bold text-center">الرصيد بعد</th>
+                            <th class="py-4 px-6 font-bold text-left">التاريخ</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-white/5 font-mono">
+                        @foreach($transactions as $tx)
+                            <tr class="hover:bg-white/[0.02] transition">
+                                <td class="py-4 px-6">
+                                    {!! $tx->type_badge !!}
+                                </td>
+                                <td class="py-4 px-4 font-sans text-slate-200">
+                                    {{ $tx->description }}
+                                </td>
+                                <td class="py-4 px-4 text-center font-bold text-sm {{ $tx->amount >= 0 ? 'text-emerald-400' : 'text-rose-400' }}">
+                                    {{ $tx->amount >= 0 ? '+' : '' }}${{ number_format($tx->amount, 2) }}
+                                </td>
+                                <td class="py-4 px-4 text-center text-slate-400">
+                                    ${{ number_format($tx->balance_before, 2) }}
+                                </td>
+                                <td class="py-4 px-4 text-center text-white font-bold">
+                                    ${{ number_format($tx->balance_after, 2) }}
+                                </td>
+                                <td class="py-4 px-6 text-left text-slate-400 text-[11px]">
+                                    {{ $tx->created_at->format('Y-m-d H:i') }}
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="p-4 border-t border-white/10">
+                {{ $transactions->links() }}
+            </div>
+        @else
+            <div class="text-center py-16 p-6">
+                <i class="fa-solid fa-receipt text-3xl text-slate-600 mb-3"></i>
+                <h3 class="text-sm font-bold text-white mb-1">لا توجد حركات مالية حتى الآن</h3>
+                <p class="text-xs text-slate-400">ستظهر هنا تفاصيل أي إيداع أو شراء يوزرات أو طلبات متابعين تنفذها.</p>
+            </div>
+        @endif
+    </div>
+
+</div>
+@endsection
