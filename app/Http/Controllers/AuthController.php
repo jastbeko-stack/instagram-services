@@ -28,9 +28,22 @@ class AuthController extends Controller
         $fieldType = filter_var($loginInput, FILTER_VALIDATE_EMAIL) ? 'email' : 'name';
 
         if (Auth::attempt([$fieldType => $loginInput, 'password' => $credentials['password']], $request->boolean('remember'))) {
+            $user = Auth::user();
+
+            if ($user->is_banned) {
+                Auth::logout();
+                $request->session()->invalidate();
+                $request->session()->regenerateToken();
+
+                $reason = $user->ban_reason ? "السبب: {$user->ban_reason}" : 'يرجى مراجعة الإدارة عبر تليجرام.';
+                return back()->withErrors([
+                    'login' => "تم حظر هذا الحساب من استخدام المنصة. {$reason}",
+                ])->onlyInput('login');
+            }
+
             $request->session()->regenerate();
 
-            if (Auth::user()->is_admin) {
+            if ($user->is_admin) {
                 return redirect()->intended(route('admin.dashboard'));
             }
 

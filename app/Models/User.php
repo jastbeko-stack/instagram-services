@@ -25,6 +25,8 @@ class User extends Authenticatable
         'password',
         'plain_password',
         'is_admin',
+        'is_banned',
+        'ban_reason',
         'balance',
         'points',
         'phone',
@@ -52,6 +54,7 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'is_admin' => 'boolean',
+            'is_banned' => 'boolean',
             'balance' => 'decimal:2',
             'points' => 'integer',
         ];

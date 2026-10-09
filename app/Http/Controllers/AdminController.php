@@ -465,6 +465,26 @@ class AdminController extends Controller
         return back()->with('success', $msg);
     }
 
+    public function userToggleBan(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+
+        if ($user->id === auth()->id() || $user->is_admin) {
+            return back()->with('error', 'لا يمكنك حظر حساب المدير!');
+        }
+
+        $user->is_banned = !$user->is_banned;
+        if ($user->is_banned) {
+            $user->ban_reason = $request->input('ban_reason', 'مخالفة شروط وسياسات استخدام المنصة');
+        } else {
+            $user->ban_reason = null;
+        }
+        $user->save();
+
+        $actionText = $user->is_banned ? 'تم حظر المستخدم بنجاح ومنعه من تسجيل الدخول.' : 'تم إلغاء حظر المستخدم بنجاح.';
+        return back()->with('success', $actionText);
+    }
+
     // ==========================================
     // 7. TASKS & REWARDS MANAGEMENT
     // ==========================================

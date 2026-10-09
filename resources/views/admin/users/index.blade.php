@@ -64,8 +64,12 @@
                             <td class="py-4 px-4 text-center">
                                 @if($u->is_admin)
                                     <span class="px-2 py-0.5 rounded-full text-[10px] bg-purple-500/10 text-purple-400 border border-purple-500/20 font-bold">مدير</span>
+                                @elseif($u->is_banned)
+                                    <span class="px-2 py-0.5 rounded-full text-[10px] bg-rose-500/20 text-rose-400 border border-rose-500/30 font-bold flex items-center justify-center gap-1">
+                                        <i class="fa-solid fa-ban"></i> محظور
+                                    </span>
                                 @else
-                                    <span class="px-2 py-0.5 rounded-full text-[10px] bg-slate-500/10 text-slate-400 border border-slate-500/20">عميل</span>
+                                    <span class="px-2 py-0.5 rounded-full text-[10px] bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">نشط</span>
                                 @endif
                             </td>
                             <td class="py-4 px-4 text-center font-mono font-bold text-emerald-400 text-sm">
@@ -74,10 +78,54 @@
                             <td class="py-4 px-4 text-left font-mono text-[11px] text-slate-400">
                                 {{ $u->created_at->format('Y-m-d') }}
                             </td>
-                            <td class="py-4 px-6 text-left" x-data="{ openAdjust: false }">
-                                <button @click="openAdjust = true" class="px-3 py-1.5 rounded-lg bg-emerald-600/10 hover:bg-emerald-600/20 text-emerald-400 font-bold text-xs transition flex items-center gap-1.5">
-                                    <i class="fa-solid fa-coins"></i> تعديل الرصيد
-                                </button>
+                            <td class="py-4 px-6 text-left" x-data="{ openAdjust: false, openBan: false }">
+                                <div class="flex items-center gap-2 justify-end">
+                                    <button @click="openAdjust = true" class="px-2.5 py-1.5 rounded-lg bg-emerald-600/10 hover:bg-emerald-600/20 text-emerald-400 font-bold text-xs transition flex items-center gap-1" title="تعديل الرصيد">
+                                        <i class="fa-solid fa-coins"></i> رصيد
+                                    </button>
+
+                                    @if(!$u->is_admin)
+                                        <button @click="openBan = true" class="px-2.5 py-1.5 rounded-lg {{ $u->is_banned ? 'bg-amber-600/10 text-amber-400 hover:bg-amber-600/20' : 'bg-rose-600/10 text-rose-400 hover:bg-rose-600/20' }} font-bold text-xs transition flex items-center gap-1" title="{{ $u->is_banned ? 'فك الحظر' : 'حظر الحساب' }}">
+                                            <i class="fa-solid {{ $u->is_banned ? 'fa-unlock' : 'fa-ban' }}"></i>
+                                            <span>{{ $u->is_banned ? 'إلغاء الحظر' : 'حظر' }}</span>
+                                        </button>
+                                    @endif
+                                </div>
+
+                                <!-- Ban/Unban Modal -->
+                                <div x-show="openBan" x-cloak class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+                                    <div @click.away="openBan = false" class="bg-dark-900 border border-white/10 rounded-2xl p-6 max-w-sm w-full text-right shadow-2xl">
+                                        <h4 class="text-sm font-bold text-white mb-2 flex items-center gap-2">
+                                            <i class="fa-solid {{ $u->is_banned ? 'fa-unlock text-emerald-400' : 'fa-ban text-rose-400' }}"></i>
+                                            <span>{{ $u->is_banned ? 'تأكيد فك الحظر عن الحساب' : 'حظر حساب المستخدم' }}</span>
+                                        </h4>
+                                        <p class="text-xs text-slate-300 mb-4">
+                                            المستخدم: <strong class="text-white">{{ $u->name }}</strong> ({{ $u->email }})
+                                        </p>
+
+                                        <form action="{{ route('admin.users.toggleBan', $u->id) }}" method="POST" class="space-y-4">
+                                            @csrf
+                                            @if(!$u->is_banned)
+                                                <div>
+                                                    <label class="block text-xs font-bold text-slate-300 mb-1">سبب الحظر (يظهر للمستخدم عند محاولة الدخول)</label>
+                                                    <input type="text" name="ban_reason" placeholder="مثال: انتهاك شروط الخدمة أو نشاط مشبوه"
+                                                        class="w-full bg-black/50 border border-white/10 rounded-xl px-3 py-2 text-xs text-white">
+                                                </div>
+                                            @else
+                                                <p class="text-xs text-amber-300/80 bg-amber-500/10 p-3 rounded-xl border border-amber-500/20">
+                                                    عند إلغاء الحظر، سيتمكن المستخدم من تسجيل الدخول واستخدام رصيده بشكل طبيعي.
+                                                </p>
+                                            @endif
+
+                                            <div class="flex items-center justify-end gap-2 pt-2">
+                                                <button type="button" @click="openBan = false" class="px-3 py-1.5 rounded-lg bg-white/5 text-slate-300 text-xs">إلغاء</button>
+                                                <button type="submit" class="px-4 py-1.5 rounded-lg {{ $u->is_banned ? 'bg-emerald-600 hover:bg-emerald-500' : 'bg-rose-600 hover:bg-rose-500' }} text-white font-bold text-xs transition">
+                                                    {{ $u->is_banned ? 'تأكيد فك الحظر' : 'تأكيد الحظر فوراً' }}
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
 
                                 <!-- Balance Adjustment Modal -->
                                 <div x-show="openAdjust" x-cloak class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">

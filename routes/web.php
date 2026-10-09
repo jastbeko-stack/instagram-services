@@ -90,6 +90,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     // Users & Balance adjustments
     Route::get('/users', [AdminController::class, 'usersIndex'])->name('users.index');
     Route::post('/users/{id}/adjust-balance', [AdminController::class, 'userAdjustBalance'])->name('users.adjustBalance');
+    Route::post('/users/{id}/toggle-ban', [AdminController::class, 'userToggleBan'])->name('users.toggleBan');
 
     // Tasks Management
     Route::get('/tasks', [AdminController::class, 'tasksIndex'])->name('tasks.index');
