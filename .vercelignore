@@ -1,0 +1,9 @@
+.git
+.github
+tests
+.env
+docker
+Dockerfile
+check_*.py
+verify_*.py
+test_*.py
