@@ -18,8 +18,8 @@
                 <label class="block text-xs font-bold text-slate-300 mb-2">اسم المستخدم أو البريد الإلكتروني</label>
                 <div class="relative">
                     <input type="text" name="login" value="{{ old('login') }}" required autofocus
-                        placeholder="ht8k أو البريد الإلكتروني"
-                        class="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-pink-500 transition text-left dir-ltr">
+                        placeholder="أدخل اسم المستخدم أو البريد"
+                        class="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-pink-500 transition text-right">
                 </div>
                 @error('login')
                     <p class="text-xs text-rose-400 mt-1 font-medium">{{ $message }}</p>
