@@ -22,24 +22,28 @@ class SmmOrderController extends Controller
 
     public function index()
     {
-        $categories = SmmCategory::where('status', true)
-            ->with(['services' => function ($query) {
-                $query->where('status', true)->orderBy('price_per_1k');
-            }])
-            ->orderBy('sort_order')
-            ->get();
+        $categories = \Illuminate\Support\Facades\Cache::remember('smm_categories_list', 600, function () {
+            return SmmCategory::where('status', true)
+                ->with(['services' => function ($query) {
+                    $query->where('status', true)->orderBy('price_per_1k');
+                }])
+                ->orderBy('sort_order')
+                ->get();
+        });
 
         return view('smm.index', compact('categories'));
     }
 
     public function servicesList()
     {
-        $categories = SmmCategory::where('status', true)
-            ->with(['services' => function ($query) {
-                $query->where('status', true)->orderBy('price_per_1k');
-            }])
-            ->orderBy('sort_order')
-            ->get();
+        $categories = \Illuminate\Support\Facades\Cache::remember('smm_categories_list', 600, function () {
+            return SmmCategory::where('status', true)
+                ->with(['services' => function ($query) {
+                    $query->where('status', true)->orderBy('price_per_1k');
+                }])
+                ->orderBy('sort_order')
+                ->get();
+        });
 
         return view('smm.services-table', compact('categories'));
     }
