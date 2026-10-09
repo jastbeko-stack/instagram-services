@@ -67,26 +67,33 @@ class AuthController extends Controller
     {
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
             'phone' => ['nullable', 'string', 'max:50'],
             'telegram' => ['nullable', 'string', 'max:100'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
 
-        $user = User::create([
-            'name' => $validated['name'],
-            'email' => $validated['email'],
-            'phone' => $validated['phone'] ?? null,
-            'telegram' => $validated['telegram'] ?? null,
-            'password' => Hash::make($validated['password']),
-            'plain_password' => $validated['password'],
-            'balance' => 0.00,
-            'is_admin' => false,
-        ]);
+        try {
+            $user = User::create([
+                'name' => $validated['name'],
+                'email' => $validated['email'],
+                'phone' => $validated['phone'] ?? null,
+                'telegram' => $validated['telegram'] ?? null,
+                'password' => Hash::make($validated['password']),
+                'plain_password' => $validated['password'],
+                'balance' => 0.00,
+                'is_admin' => false,
+            ]);
 
-        Auth::login($user);
+            Auth::login($user);
 
-        return redirect()->route('home')->with('success', 'أهلاً بك! تم إنشاء حسابك بنجاح.');
+            return redirect()->route('home')->with('success', 'أهلاً بك! تم إنشاء حسابك بنجاح.');
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::error('Registration Error: ' . $e->getMessage(), ['trace' => $e->getTraceAsString()]);
+            return back()->withInput()->withErrors([
+                'email' => 'حدث خطأ أثناء إنشاء الحساب: ' . $e->getMessage(),
+            ]);
+        }
     }
 
     public function logout(Request $request)
