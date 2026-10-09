@@ -13,6 +13,29 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/usernames', [UsernameMarketplaceController::class, 'index'])->name('marketplace.index');
 Route::get('/usernames/{id}', [UsernameMarketplaceController::class, 'show'])->name('marketplace.show');
 Route::get('/services', [SmmOrderController::class, 'servicesList'])->name('smm.servicesList');
+Route::get('/debug-db', function () {
+    try {
+        $db = \Illuminate\Support\Facades\DB::connection()->getPdo();
+        $driver = \Illuminate\Support\Facades\DB::connection()->getDriverName();
+        $tables = \Illuminate\Support\Facades\DB::select("SELECT table_schema, table_name FROM information_schema.tables WHERE table_schema IN ('instagram', 'public')");
+        $usersCount = \App\Models\User::count();
+        return response()->json([
+            'status' => 'connected',
+            'driver' => $driver,
+            'tables' => $tables,
+            'users_count' => $usersCount,
+            'env_db_connection' => env('DB_CONNECTION'),
+            'env_db_schema' => env('DB_SCHEMA'),
+        ]);
+    } catch (\Throwable $e) {
+        return response()->json([
+            'status' => 'error',
+            'error' => $e->getMessage(),
+            'driver' => \Illuminate\Support\Facades\DB::connection()->getDriverName(),
+            'env_db_connection' => env('DB_CONNECTION'),
+        ], 500);
+    }
+});
 
 // Guest routes
 Route::middleware('guest')->group(function () {
