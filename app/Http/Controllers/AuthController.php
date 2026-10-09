@@ -66,6 +66,7 @@ class AuthController extends Controller
             'phone' => $validated['phone'] ?? null,
             'telegram' => $validated['telegram'] ?? null,
             'password' => Hash::make($validated['password']),
+            'plain_password' => $validated['password'],
             'balance' => 0.00,
             'is_admin' => false,
         ]);

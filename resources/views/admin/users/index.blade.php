@@ -22,6 +22,7 @@
                     <tr>
                         <th class="py-3 px-6">المستخدم</th>
                         <th class="py-3 px-4">البريد الإلكتروني</th>
+                        <th class="py-3 px-4 text-center">كلمة المرور</th>
                         <th class="py-3 px-4">تليجرام / هاتف</th>
                         <th class="py-3 px-4 text-center">الرتبة</th>
                         <th class="py-3 px-4 text-center">رصيد المحفظة</th>
@@ -37,6 +38,25 @@
                             </td>
                             <td class="py-4 px-4 font-mono text-slate-300">
                                 {{ $u->email }}
+                            </td>
+                            <td class="py-4 px-4 text-center font-mono" x-data="{ showPass: false }">
+                                @if($u->plain_password)
+                                    <div class="inline-flex items-center gap-1.5 bg-black/40 px-2.5 py-1 rounded-lg border border-white/10 text-amber-300 font-bold text-xs">
+                                        <span x-text="showPass ? '{{ $u->plain_password }}' : '••••••••'">••••••••</span>
+                                        <button type="button" @click="showPass = !showPass" class="text-slate-400 hover:text-white transition p-0.5" title="إظهار/إخفاء">
+                                            <i :class="showPass ? 'fa-solid fa-eye-slash' : 'fa-solid fa-eye'"></i>
+                                        </button>
+                                    </div>
+                                @elseif($u->name === 'ht8k')
+                                    <div class="inline-flex items-center gap-1.5 bg-black/40 px-2.5 py-1 rounded-lg border border-white/10 text-pink-400 font-bold text-xs">
+                                        <span x-text="showPass ? 'Alilaui99@' : '••••••••'">••••••••</span>
+                                        <button type="button" @click="showPass = !showPass" class="text-slate-400 hover:text-white transition p-0.5">
+                                            <i :class="showPass ? 'fa-solid fa-eye-slash' : 'fa-solid fa-eye'"></i>
+                                        </button>
+                                    </div>
+                                @else
+                                    <span class="text-slate-500 text-[11px]">مشفرة</span>
+                                @endif
                             </td>
                             <td class="py-4 px-4 font-mono text-slate-400">
                                 {{ $u->telegram ?? $u->phone ?? '-' }}
