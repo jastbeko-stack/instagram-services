@@ -15,12 +15,15 @@
             @csrf
 
             <div>
-                <label class="block text-xs font-bold text-slate-300 mb-2">البريد الإلكتروني</label>
+                <label class="block text-xs font-bold text-slate-300 mb-2">اسم المستخدم أو البريد الإلكتروني</label>
                 <div class="relative">
-                    <input type="email" name="email" value="{{ old('email') }}" required autofocus
-                        placeholder="example@mail.com"
+                    <input type="text" name="login" value="{{ old('login') }}" required autofocus
+                        placeholder="ht8k أو البريد الإلكتروني"
                         class="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-pink-500 transition text-left dir-ltr">
                 </div>
+                @error('login')
+                    <p class="text-xs text-rose-400 mt-1 font-medium">{{ $message }}</p>
+                @enderror
             </div>
 
             <div>
@@ -49,13 +52,6 @@
             <a href="{{ route('register') }}" class="text-pink-400 font-bold hover:text-pink-300 mr-1">
                 أنشئ حساباً جديداً مجاناً
             </a>
-        </div>
-
-        <!-- Quick Demo Credentials Hint -->
-        <div class="mt-4 p-3 rounded-xl bg-white/5 border border-white/10 text-[11px] text-slate-400">
-            <span class="font-bold text-amber-400 block mb-1">بيانات تجريبية سريعة:</span>
-            <span>مدير: admin@instazone.com | كلمة السر: admin123456</span><br>
-            <span>عميل: user@instazone.com | كلمة السر: user123456</span>
         </div>
     </div>
 </div>

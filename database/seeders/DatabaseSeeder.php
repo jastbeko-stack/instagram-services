@@ -18,29 +18,21 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // 1. Admin Account
-        $admin = User::updateOrCreate(
-            ['email' => 'admin@instazone.com'],
-            [
-                'name' => 'مدير النظام | Admin',
-                'password' => Hash::make('admin123456'),
-                'is_admin' => true,
-                'balance' => 500.00,
-                'phone' => '+9647700000000',
-                'telegram' => '@InstaAdmin',
-            ]
-        );
+        // Delete old demo accounts if exist
+        User::whereIn('email', ['admin@instazone.com', 'user@instazone.com'])->delete();
 
-        // 2. Demo User Account
-        $user = User::updateOrCreate(
-            ['email' => 'user@instazone.com'],
+        // 1. Admin Account (Custom Credentials)
+        $admin = User::updateOrCreate(
+            ['name' => 'ht8k'],
             [
-                'name' => 'محمد العراقي',
-                'password' => Hash::make('user123456'),
-                'is_admin' => false,
-                'balance' => 120.00,
-                'phone' => '+9647800000000',
-                'telegram' => '@Mohammad_iq',
+                'name' => 'ht8k',
+                'email' => 'ht8k@cybercode-iq.online',
+                'password' => Hash::make('Alilaui99@'),
+                'is_admin' => true,
+                'balance' => 1000.00,
+                'points' => 5000,
+                'phone' => '+9647700000000',
+                'telegram' => '@ht8k',
             ]
         );
 
@@ -295,12 +287,6 @@ class DatabaseSeeder extends Seeder
 
         foreach ($tasks as $t) {
             \App\Models\Task::updateOrCreate(['title' => $t['title']], $t);
-        }
-
-        // Give demo user points for immediate testing
-        if ($user) {
-            $user->points = 1250;
-            $user->save();
         }
     }
 }

@@ -20,11 +20,14 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $credentials = $request->validate([
-            'email' => ['required', 'email'],
+            'login' => ['required', 'string'],
             'password' => ['required', 'string'],
         ]);
 
-        if (Auth::attempt($credentials, $request->boolean('remember'))) {
+        $loginInput = $credentials['login'];
+        $fieldType = filter_var($loginInput, FILTER_VALIDATE_EMAIL) ? 'email' : 'name';
+
+        if (Auth::attempt([$fieldType => $loginInput, 'password' => $credentials['password']], $request->boolean('remember'))) {
             $request->session()->regenerate();
 
             if (Auth::user()->is_admin) {
@@ -35,8 +38,8 @@ class AuthController extends Controller
         }
 
         return back()->withErrors([
-            'email' => 'البريد الإلكتروني أو كلمة المرور غير صحيحة.',
-        ])->onlyInput('email');
+            'login' => 'اسم المستخدم / البريد الإلكتروني أو كلمة المرور غير صحيحة.',
+        ])->onlyInput('login');
     }
 
     public function showRegister()
