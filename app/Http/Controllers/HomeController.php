@@ -12,10 +12,12 @@ class HomeController extends Controller
 {
     public function index()
     {
-        $featuredUsernames = InstagramUsername::where('status', 'available')
-            ->latest()
-            ->take(6)
-            ->get();
+        $featuredUsernames = \Illuminate\Support\Facades\Cache::remember('home_featured_usernames', 180, function () {
+            return InstagramUsername::where('status', 'available')
+                ->latest()
+                ->take(6)
+                ->get();
+        });
 
         $categories = \Illuminate\Support\Facades\Cache::remember('home_categories', 300, function () {
             return SmmCategory::where('status', true)
