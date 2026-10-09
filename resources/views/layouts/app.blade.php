@@ -93,10 +93,13 @@
                             <i class="fa-brands fa-instagram text-xl sm:text-2xl text-white"></i>
                         </div>
                         <div>
-                            <span class="text-xl sm:text-2xl font-black tracking-tight text-white block leading-tight">
-                                انستا<span class="insta-gradient-text">زون</span>
+                            @php
+                                $siteName = \App\Models\Setting::get('site_name', 'سايبر كود | cyber code');
+                            @endphp
+                            <span class="text-lg sm:text-2xl font-black tracking-tight text-white block leading-tight">
+                                {{ $siteName }}
                             </span>
-                            <span class="text-[9px] sm:text-[10px] text-slate-400 tracking-wider font-outfit uppercase">InstaZone Services</span>
+                            <span class="text-[9px] sm:text-[10px] text-pink-400 tracking-wider font-outfit uppercase">CyberCode Services</span>
                         </div>
                     </a>
                 </div>
@@ -228,7 +231,7 @@
                             <div class="w-9 h-9 rounded-xl insta-gradient flex items-center justify-center text-white">
                                 <i class="fa-brands fa-instagram text-lg"></i>
                             </div>
-                            <span class="text-lg font-black text-white">انستا<span class="insta-gradient-text">زون</span></span>
+                            <span class="text-base font-black text-white truncate max-w-[170px]">{{ \App\Models\Setting::get('site_name', 'سايبر كود') }}</span>
                         </div>
                         <button @click="mobileMenuOpen = false" class="p-2 text-slate-400 hover:text-white rounded-lg bg-white/5">
                             <i class="fa-solid fa-xmark text-lg"></i>
@@ -361,7 +364,7 @@
                         <div class="w-10 h-10 rounded-xl insta-gradient flex items-center justify-center text-white">
                             <i class="fa-brands fa-instagram text-xl"></i>
                         </div>
-                        <span class="text-xl font-black text-white">انستا<span class="insta-gradient-text">زون</span></span>
+                        <span class="text-xl font-black text-white">{{ \App\Models\Setting::get('site_name', 'سايبر كود') }}</span>
                     </div>
                     <p class="text-slate-400 text-xs sm:text-sm leading-relaxed max-w-md">
                         المنصة المتكاملة الأولى لخدمات انستقرام الاحترافية: متجر بيع اليوزرات القديمة والرباعية النادرة مع التسليم الفوري والآمن، وسيرفرات زيادة المتابعين والتفاعل الأسرع عربياً بدعم الدفع بالعملات الرقمية USDT.
