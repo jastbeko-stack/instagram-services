@@ -68,6 +68,14 @@
             box-shadow: 0 0 25px rgba(220, 39, 67, 0.25);
         }
         [x-cloak] { display: none !important; }
+        html.is-animating #swup {
+            opacity: 0.85;
+            filter: blur(1px);
+            transition: opacity 100ms ease, filter 100ms ease;
+        }
+        #swup {
+            transition: opacity 120ms ease, filter 120ms ease;
+        }
     </style>
 </head>
 <body class="min-h-screen flex flex-col antialiased selection:bg-pink-500 selection:text-white pb-24 md:pb-0">
