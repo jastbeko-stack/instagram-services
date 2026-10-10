@@ -17,16 +17,66 @@
             </div>
 
             <!-- Big Balance Box -->
-            <div class="bg-black/60 rounded-2xl p-6 border border-emerald-500/30 text-center sm:text-right flex items-center gap-6">
+            <div class="bg-black/60 rounded-2xl p-6 border border-white/10 text-center sm:text-right flex flex-col sm:flex-row items-center gap-6">
                 <div>
                     <span class="text-xs text-slate-400 block mb-1">الرصيد المتاح حالياً</span>
                     <div class="text-3xl sm:text-4xl font-black font-outfit text-white">
                         ${{ number_format($user->balance, 2) }}
-                        <span class="text-sm font-mono text-emerald-400">USDT</span>
+                        <span class="text-sm font-mono text-emerald-400">USD</span>
                     </div>
                 </div>
-                <a href="{{ route('wallet.deposit') }}" class="px-6 py-3.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs shadow-lg shadow-emerald-600/30 transition flex items-center gap-2 shrink-0">
-                    <i class="fa-solid fa-plus"></i> شحن رصيد USDT
+                <a href="{{ route('wallet.deposit') }}" class="px-6 py-3.5 rounded-xl bg-pink-600 hover:bg-pink-500 text-white font-bold text-xs shadow-lg shadow-pink-600/30 transition flex items-center gap-2 shrink-0">
+                    <i class="fa-solid fa-plus"></i> شحن الرصيد الآن
+                </a>
+            </div>
+        </div>
+
+        <!-- Direct Payment Methods Grid (Visible before entering deposit page) -->
+        <div class="mt-8 pt-6 border-t border-white/10">
+            <h3 class="text-sm font-bold text-slate-300 mb-4 flex items-center gap-2">
+                <i class="fa-solid fa-credit-card text-yellow-400"></i> طرق شحن الرصيد المتاحة:
+            </h3>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <!-- Method 1: Super Qi / Mastercard -->
+                <a href="{{ route('wallet.deposit') }}" class="p-4 rounded-2xl bg-black/40 border border-yellow-500/30 hover:border-yellow-500/60 transition group flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-yellow-500/20 text-yellow-400 flex items-center justify-center text-lg group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-credit-card"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-sm font-bold text-white group-hover:text-yellow-400 transition-colors">سوبر كي / ماستركارد</h4>
+                            <p class="text-[11px] text-slate-400">Super Qi & Qi Card</p>
+                        </div>
+                    </div>
+                    <span class="text-xs text-yellow-400 font-bold bg-yellow-500/10 px-2.5 py-1 rounded-lg border border-yellow-500/20">شحن فوراً</span>
+                </a>
+
+                <!-- Method 2: ZainCash -->
+                <a href="{{ route('wallet.deposit') }}" class="p-4 rounded-2xl bg-black/40 border border-purple-500/30 hover:border-purple-500/60 transition group flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-purple-500/20 text-purple-400 flex items-center justify-center text-lg group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-mobile-screen"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-sm font-bold text-white group-hover:text-purple-400 transition-colors">زين كاش (ZainCash)</h4>
+                            <p class="text-[11px] text-slate-400">تحويل سريع بالمحفظة</p>
+                        </div>
+                    </div>
+                    <span class="text-xs text-purple-400 font-bold bg-purple-500/10 px-2.5 py-1 rounded-lg border border-purple-500/20">شحن فوراً</span>
+                </a>
+
+                <!-- Method 3: USDT -->
+                <a href="{{ route('wallet.deposit') }}" class="p-4 rounded-2xl bg-black/40 border border-emerald-500/30 hover:border-emerald-500/60 transition group flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-lg group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-coins"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-sm font-bold text-white group-hover:text-emerald-400 transition-colors">العملات الرقمية (USDT)</h4>
+                            <p class="text-[11px] text-slate-400">TRC20 / BEP20 Binance</p>
+                        </div>
+                    </div>
+                    <span class="text-xs text-emerald-400 font-bold bg-emerald-500/10 px-2.5 py-1 rounded-lg border border-emerald-500/20">شحن فوراً</span>
                 </a>
             </div>
         </div>
