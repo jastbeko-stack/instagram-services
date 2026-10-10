@@ -41,6 +41,9 @@
     </script>
     <!-- Alpine.js -->
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <!-- Swup SPA Engine for Instant Page Transitions -->
+    <script src="https://unpkg.com/swup@4"></script>
+    <script src="https://unpkg.com/@swup/preload-plugin@3"></script>
     <style>
         body {
             font-family: 'Cairo', sans-serif;
@@ -325,7 +328,7 @@
     </div>
 
     <!-- Main Content Area -->
-    <main class="flex-grow">
+    <main id="swup" class="flex-grow transition-opacity duration-150">
         @yield('content')
     </main>
 
@@ -419,5 +422,22 @@
     </footer>
 
     @yield('scripts')
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            if (typeof Swup !== 'undefined') {
+                const swup = new Swup({
+                    containers: ['#swup'],
+                    plugins: [new SwupPreloadPlugin()]
+                });
+                swup.hooks.on('page:view', () => {
+                    if (window.Alpine) {
+                        window.Alpine.initTree(document.getElementById('swup'));
+                    }
+                    window.scrollTo({ top: 0, behavior: 'instant' });
+                });
+            }
+        });
+    </script>
 </body>
 </html>
