@@ -14,7 +14,9 @@ class AuthController extends Controller
         if (Auth::check()) {
             return redirect()->route('home');
         }
-        return view('auth.login');
+        return response()
+            ->view('auth.login')
+            ->header('Cache-Control', 'public, s-maxage=300, stale-while-revalidate=600');
     }
 
     public function login(Request $request)
@@ -60,7 +62,9 @@ class AuthController extends Controller
         if (Auth::check()) {
             return redirect()->route('home');
         }
-        return view('auth.register');
+        return response()
+            ->view('auth.register')
+            ->header('Cache-Control', 'public, s-maxage=300, stale-while-revalidate=600');
     }
 
     public function register(Request $request)

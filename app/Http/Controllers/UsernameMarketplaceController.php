@@ -62,7 +62,9 @@ class UsernameMarketplaceController extends Controller
             ->take(3)
             ->get();
 
-        return view('marketplace.show', compact('username', 'related'));
+        return response()
+            ->view('marketplace.show', compact('username', 'related'))
+            ->header('Cache-Control', 'public, s-maxage=60, stale-while-revalidate=300');
     }
 
     public function buy(Request $request, $id)
