@@ -36,18 +36,29 @@
     @if($pendingDeposits->count() > 0)
         <div class="glass-card rounded-2xl p-5 border border-amber-500/30 bg-amber-500/5">
             <h3 class="text-xs font-bold text-amber-400 mb-3 flex items-center gap-2">
-                <i class="fa-solid fa-hourglass-half"></i> طلبات إيداع قيد المراجعة والتدقيق:
+                <i class="fa-solid fa-hourglass-half"></i> طلبات شحن قيد المراجعة والتدقيق:
             </h3>
             <div class="space-y-2">
                 @foreach($pendingDeposits as $p)
                     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 p-3 rounded-xl bg-black/40 border border-white/5 text-xs">
                         <div class="flex items-center gap-3">
                             <span class="font-mono text-amber-300 font-bold">#{{ $p->deposit_code }}</span>
-                            <span>إيداع <strong class="text-white">${{ number_format($p->amount_usd, 2) }} USDT</strong> عبر شبكة <strong class="text-emerald-400 font-mono">{{ $p->network }}</strong></span>
+                            {!! $p->method_badge !!}
+                            <span>شحن <strong class="text-white">${{ number_format($p->amount_usd, 2) }}</strong>
+                                @if($p->amount_iqd)
+                                    <span class="text-yellow-400 font-mono">({{ number_format($p->amount_iqd) }} د.ع)</span>
+                                @endif
+                            </span>
                         </div>
                         <div class="flex items-center gap-3 text-slate-400 font-mono text-[11px]">
-                            <span>TXID: {{ Str::limit($p->txid, 20) }}</span>
-                            <span>•</span>
+                            @if($p->card_last_four)
+                                <span>البطاقة: {{ $p->card_last_four }}</span>
+                                <span>•</span>
+                            @endif
+                            @if($p->sender_phone)
+                                <span>الهاتف: {{ $p->sender_phone }}</span>
+                                <span>•</span>
+                            @endif
                             <span>{{ $p->created_at->diffForHumans() }}</span>
                         </div>
                     </div>

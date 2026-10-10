@@ -28,6 +28,51 @@
                 </div>
             </div>
 
+            <!-- Iraqi Payment Gateways (Qi / Super Qi / ZainCash) -->
+            <div class="space-y-4 pt-4 border-t border-white/10">
+                <h3 class="text-sm font-bold text-white flex items-center gap-2 border-b border-white/10 pb-2">
+                    <i class="fa-solid fa-credit-card text-yellow-400"></i> بيانات بوابات الدفع المحلية (سوبر كي / ماستركارد / زين كاش)
+                </h3>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-300 mb-1">رقم بطاقة كي كارد / سوبر كي (Qi Card)</label>
+                        <input type="text" name="qi_card_number" value="{{ $settings['qi_card_number'] ?? '9821 0000 1234 5678' }}" required
+                            class="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white font-mono dir-ltr text-left focus:outline-none focus:border-yellow-500">
+                        <span class="text-[10px] text-slate-500 mt-1 block">رقم البطاقة أو المحفظة الذي يظهر للعملاء للتحويل المباشر من تطبيق Super Qi</span>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-slate-300 mb-1">اسم صاحب حساب سوبر كي / البطاقة</label>
+                        <input type="text" name="qi_account_name" value="{{ $settings['qi_account_name'] ?? 'انستازون لخدمات الدفع' }}" required
+                            class="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-yellow-500">
+                        <span class="text-[10px] text-slate-500 mt-1 block">الاسم للتحقق أثناء التحويل</span>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-300 mb-1">رقم محفظة زين كاش (ZainCash)</label>
+                        <input type="text" name="zaincash_phone" value="{{ $settings['zaincash_phone'] ?? '07800000000' }}" required
+                            class="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white font-mono dir-ltr text-left focus:outline-none focus:border-purple-500">
+                        <span class="text-[10px] text-slate-500 mt-1 block">رقم هاتف محفظة زين كاش لاستلام التحويلات</span>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-slate-300 mb-1">اسم حساب زين كاش</label>
+                        <input type="text" name="zaincash_account_name" value="{{ $settings['zaincash_account_name'] ?? 'InstaZone Official' }}" required
+                            class="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-purple-500">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-slate-300 mb-1">سعر صرف الدولار (دينار عراقي لكل 1$)</label>
+                        <input type="number" step="1" min="1000" name="usd_to_iqd_rate" value="{{ $settings['usd_to_iqd_rate'] ?? '1500' }}" required
+                            class="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white font-mono dir-ltr text-left focus:outline-none focus:border-emerald-500">
+                        <span class="text-[10px] text-slate-500 mt-1 block">يُستخدم لحساب المبالغ بالدينار تلقائياً</span>
+                    </div>
+                </div>
+            </div>
+
             <!-- Crypto USDT Wallets -->
             <div class="space-y-4 pt-4 border-t border-white/10">
                 <h3 class="text-sm font-bold text-white flex items-center gap-2 border-b border-white/10 pb-2">

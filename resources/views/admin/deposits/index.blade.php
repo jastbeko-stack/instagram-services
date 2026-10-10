@@ -27,9 +27,9 @@
                     <tr>
                         <th class="py-3 px-6">كود الإيداع</th>
                         <th class="py-3 px-4">العميل</th>
+                        <th class="py-3 px-4 text-center">طريقة الدفع</th>
                         <th class="py-3 px-4 text-center">المبلغ</th>
-                        <th class="py-3 px-4 text-center">الشبكة</th>
-                        <th class="py-3 px-4">كود العملية (TXID)</th>
+                        <th class="py-3 px-4">تفاصيل المعاملة / الحساب</th>
                         <th class="py-3 px-4 text-center">الإيصال</th>
                         <th class="py-3 px-4 text-center">الحالة</th>
                         <th class="py-3 px-4 text-left">التاريخ</th>
@@ -46,18 +46,37 @@
                                 <div class="font-bold text-white">{{ $dep->user->name ?? 'غير معروف' }}</div>
                                 <div class="text-[10px] text-slate-400">{{ $dep->user->email ?? '' }}</div>
                             </td>
-                            <td class="py-4 px-4 text-center font-mono font-bold text-emerald-400 text-sm">
-                                ${{ number_format($dep->amount_usd, 2) }}
+                            <td class="py-4 px-4 text-center">
+                                {!! $dep->method_badge !!}
                             </td>
                             <td class="py-4 px-4 text-center">
-                                <span class="px-2 py-0.5 rounded-full text-[10px] font-mono bg-white/5 text-slate-300 border border-white/10 font-bold">
-                                    {{ $dep->network }}
-                                </span>
-                            </td>
-                            <td class="py-4 px-4 font-mono max-w-xs">
-                                <div class="truncate text-slate-300 text-[11px] dir-ltr text-right" title="{{ $dep->txid }}">
-                                    {{ $dep->txid }}
+                                <div class="font-mono font-bold text-emerald-400 text-sm">
+                                    ${{ number_format($dep->amount_usd, 2) }}
                                 </div>
+                                @if($dep->amount_iqd)
+                                    <div class="text-[10px] text-yellow-400/90 font-mono">
+                                        {{ number_format($dep->amount_iqd) }} د.ع
+                                    </div>
+                                @endif
+                            </td>
+                            <td class="py-4 px-4 font-mono text-xs">
+                                @if($dep->card_last_four)
+                                    <div class="text-white font-bold flex items-center gap-1">
+                                        <i class="fa-solid fa-credit-card text-yellow-400 text-[10px]"></i>
+                                        <span>آخر 4 أرقام: {{ $dep->card_last_four }}</span>
+                                    </div>
+                                @endif
+                                @if($dep->sender_phone)
+                                    <div class="text-slate-300 text-[11px] dir-ltr text-right">
+                                        <i class="fa-solid fa-phone text-purple-400 text-[10px]"></i>
+                                        <span>{{ $dep->sender_phone }}</span>
+                                    </div>
+                                @endif
+                                @if($dep->txid)
+                                    <div class="truncate text-slate-400 text-[10px] dir-ltr text-right max-w-xs" title="{{ $dep->txid }}">
+                                        TX: {{ $dep->txid }}
+                                    </div>
+                                @endif
                             </td>
                             <td class="py-4 px-4 text-center">
                                 @if($dep->proof_image)
