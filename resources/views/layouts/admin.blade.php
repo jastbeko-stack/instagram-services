@@ -107,11 +107,11 @@
 
             <a href="{{ route('admin.deposits.index') }}" class="flex items-center justify-between px-3.5 py-2 rounded-xl font-medium transition {{ request()->routeIs('admin.deposits.*') ? 'bg-pink-600/20 text-pink-400 border border-pink-500/30' : 'text-slate-400 hover:text-white hover:bg-white/5' }}">
                 <span class="flex items-center gap-3">
-                    <i class="fa-solid fa-coins w-5 text-center text-emerald-400"></i> إيداعات USDT
+                    <i class="fa-solid fa-credit-card w-5 text-center text-yellow-400"></i> طلبات الشحن والإيداع
                 </span>
                 @php $pendingDepCount = \App\Models\CryptoDeposit::where('status', 'pending')->count(); @endphp
                 @if($pendingDepCount > 0)
-                    <span class="px-2 py-0.5 text-xs bg-emerald-500 text-black font-bold rounded-full animate-pulse">{{ $pendingDepCount }}</span>
+                    <span class="px-2 py-0.5 text-xs bg-yellow-500 text-black font-bold rounded-full animate-pulse">{{ $pendingDepCount }} معلق</span>
                 @endif
             </a>
 
